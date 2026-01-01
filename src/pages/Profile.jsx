@@ -1,47 +1,63 @@
 import { useSelector } from "react-redux";
-import { useNavigate  } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const Profile = () => {
   const user = useSelector((store) => store.user);
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!user) {
+    navigate("/feed");
+  }
+  }, []);
+
   const { firstName, middleName, lastName, age, gender, about, profileURL } =
     user;
 
-    const handleEdit = () => {
-      navigate("/profile/edit");
-    }
+  const handleEdit = () => {
+    navigate("/profile/edit");
+  };
 
   return (
-    <div className="flex justify-center items-center min-h-screen w-full p-4">
-      <div className="card bg-base-100 w-full max-w-sm shadow-lg rounded-xl overflow-hidden">
-        {/* Profile Image */}
-        <figure className="h-64 overflow-hidden">
-          <img 
-            src={profileURL} 
-            alt="profile photo"
-            className="w-full h-full object-cover"
-          />
-        </figure>
-
-        {/* Card Body */}
-        <div className="card-body p-5 space-y-3">
-          {/* Name */}
-          <h2 className="card-title text-xl">
-            {firstName} {middleName && middleName.charAt(0)} {lastName}
-          </h2>
-
-          {/* Info */}
-          <div className="text-sm space-y-1">
-            <p><span className="opacity-70">Age:</span> {age}</p>
-            <p><span className="opacity-70">Gender:</span> <span className="capitalize">{gender}</span></p>
-            <p><span className="opacity-70">About:</span> {about || "No bio"}</p>
+    <div className="profile">
+      <div className="profile-card1">
+        <div className="profile_card">
+          <div className="profile_image">
+            <img src={profileURL} alt="profile photo" />
           </div>
 
-          {/* Action Buttons */}
-          <div className="card-actions justify-end gap-2 mt-3">
-            <button className="btn btn-sm btn-primary" onClick={() => {handleEdit()}}>Edit</button>
+          <div className="profile_body">
+            <h1 className="profile_body_name">
+              {firstName} {middleName && middleName.charAt(0)} {lastName}
+            </h1>
+
+            <div className="profile-body-details">
+              <p>
+                <span>Age:</span> {age}
+              </p>
+              <p>
+                <span>Gender:</span>{" "}
+                <span className="capitalize">{gender}</span>
+              </p>
+              <p>
+                <span>About:</span> {about || "No bio"}
+              </p>
+            </div>
+
+          </div>
+        </div>
+        <div className="profile_card2">
+          <div className="profile-body-block">
+            <button
+              className="profile-body-btn"
+              onClick={() => {
+                handleEdit();
+              }}
+            >
+              Edit Profile
+            </button>
           </div>
         </div>
       </div>

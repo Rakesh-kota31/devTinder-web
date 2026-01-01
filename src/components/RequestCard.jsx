@@ -1,5 +1,4 @@
-import axios from "axios";
-import { baseURL } from "../utils/constants";
+import axiosInstance from "../utils/axiosInstance";
 import { useDispatch } from "react-redux";
 import { removeRequest } from "../state/requestSlice";
 
@@ -11,8 +10,8 @@ const RequestCard = (props) => {
 
   const handleReviewRequest = async (status) => {
     try {
-      const data = await axios.post(
-        baseURL + "/request/review" + "/" + status + "/" + _id,
+      const data = await axiosInstance.post(
+        "/request/review" + "/" + status + "/" + _id,
         {},
         {
           withCredentials: true,

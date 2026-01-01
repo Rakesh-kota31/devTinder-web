@@ -1,5 +1,4 @@
-import axios from "axios";
-import { baseURL } from "../utils/constants";
+import axiosInstance from "../utils/axiosInstance";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addCards } from "../state/cardSlice";
@@ -10,12 +9,18 @@ const Feed = () => {
   const dispatch = useDispatch();
 
   const fetchFeedData = async () => {
-    if (cards.length === 0) {
-      const data = await axios.get(baseURL + "/user/feed", {
-        withCredentials: true,
-      });
-      //console.log(data);
-      dispatch(addCards(data?.data?.users));
+    try {
+      if (cards.length === 0) {
+        const data = await axiosInstance.get("/user/feed", {
+          withCredentials: true,
+        });
+        //console.log(data);
+        dispatch(addCards(data?.data?.users));
+      }
+    } catch (err) {
+      // Interceptor will handle 401 redirect automatically
+      // Just log errors for debugging
+      console.error("Feed fetch error:", err.message);
     }
   };
 

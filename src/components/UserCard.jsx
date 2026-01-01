@@ -1,5 +1,4 @@
-import axios from "axios";
-import { baseURL } from "../utils/constants";
+import axiosInstance from "../utils/axiosInstance";
 import { useDispatch } from "react-redux";
 import { removeCard } from "../state/cardSlice";
 
@@ -9,8 +8,8 @@ const UserCard = (props) => {
 
   const handleSendRequest = async (status) => {
     try {
-      const data = await axios.post(
-        baseURL + "/request/send/" + status + "/" + _id,
+      const data = await axiosInstance.post(
+        "/request/send/" + status + "/" + _id,
         {},
         {
           withCredentials: true,

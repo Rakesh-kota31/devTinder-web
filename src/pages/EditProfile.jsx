@@ -2,22 +2,25 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { validateProfileEditData } from "../utils/validations";
-import axios from "axios";
-import { baseURL, defaultProfileURL } from "../utils/constants";
+import { defaultProfileURL } from "../utils/constants";
 import { updateUser } from "../state/userSlice";
+import axiosInstance from "../utils/axiosInstance";
 
 const EditProfile = () => {
   const user = useSelector((store) => store.user);
-  const [firstName, setFirstName] = useState(user.firstName || "");
-  const [middleName, setMiddleName] = useState(user.middleName || "");
-  const [lastName, setLastName] = useState(user.lastName || "");
-  const [age, setAge] = useState(user.age || "");
-  const [gender, setGender] = useState(user.gender || "");
-  const [about, setAbout] = useState(user.about || "");
-  const [profileURL, setProfileURL] = useState(
-    user.profileURL || defaultProfileURL
-  );
-  // const [skills, setSkills] = useState(user.skills);
+
+  const [profileFile, setProfileFile] = useState(null);
+
+  const [userData, setUserData] = useState({
+    firstName: user.firstName || "",
+    middleName: user.middleName || "",
+    lastName: user.lastName || "",
+    age: user.age || "",
+    gender: user.gender || "",
+    about: user.about || "",
+    profileURL: user.profileURL || defaultProfileURL,
+  });
+
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -27,52 +30,72 @@ const EditProfile = () => {
     navigate("/profile");
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setProfileFile(file);
+  };
+
+  const handleUpload = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("profile-photo", profileFile);
+
+      const data = await axiosInstance.post("profile/upload-photo", formData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      dispatch(updateUser(data?.data?.data));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleSave = async () => {
-    const currentState = {
-      firstName,
-      middleName,
-      lastName,
-      age,
-      gender,
-      about,
-      profileURL,
-    };
-    const err = validateProfileEditData(currentState);
+    const err = validateProfileEditData(userData);
 
     if (Object.keys(err).length !== 0) setErrors(err);
 
     const changedFields = {};
 
-    Object.keys(currentState).forEach((key) => {
-      if (currentState[key] !== user[key]) {
-        changedFields[key] = currentState[key];
+    Object.keys(userData).forEach((key) => {
+      if (userData[key] !== user[key] && userData[key] !== "") {
+        changedFields[key] = userData[key];
       }
     });
 
     try {
-      const data = await axios.patch(baseURL + "/profile/edit", changedFields, {
+      const data = await axiosInstance.patch("/profile/edit", changedFields, {
         withCredentials: true,
       });
       dispatch(updateUser(data?.data?.data));
       setShowToast(true);
-      setInterval(() => {
+      const id = setTimeout(() => {
         setShowToast(false);
-      }, 3000);
+      }, 5000);
+      clearTimeout(id);
       navigate("/profile");
     } catch (err) {
       console.log(err);
     }
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setUserData({
+      ...userData,
+      [name]: value,
+    });
+  };
+
   return (
     <div className="flex justify-center items-center min-h-screen w-full p-4">
       {showToast && (
         <div className="toast toast-top toast-center">
-          <div className="alert alert-info">
-            <span>New mail arrived.</span>
-          </div>
           <div className="alert alert-success">
-            <span>Message sent successfully.</span>
+            <span>Profile data is updated successfully</span>
           </div>
         </div>
       )}
@@ -80,7 +103,7 @@ const EditProfile = () => {
         {/* Profile Image */}
         <figure className="h-64 overflow-hidden">
           <img
-            src={profileURL}
+            src={userData.profileURL || defaultProfileURL}
             alt="profile photo"
             className="w-full h-full object-cover"
           />
@@ -90,20 +113,23 @@ const EditProfile = () => {
         <div className="card-body p-5 space-y-3">
           {/* Name */}
           <h2 className="card-title text-xl">
-            {firstName} {middleName && middleName.charAt(0)} {lastName}
+            {userData.firstName}{" "}
+            {userData.middleName && userData.middleName.charAt(0)}{" "}
+            {userData.lastName}
           </h2>
 
           {/* Info */}
           <div className="text-sm space-y-1">
             <p>
-              <span className="opacity-70">Age:</span> {age}
+              <span className="opacity-70">Age:</span> {userData.age}
             </p>
             <p>
               <span className="opacity-70">Gender:</span>{" "}
-              <span className="capitalize">{gender}</span>
+              <span className="capitalize">{userData.gender}</span>
             </p>
             <p>
-              <span className="opacity-70">About:</span> {about || "No bio"}
+              <span className="opacity-70">About:</span>{" "}
+              {userData.about || "No bio"}
             </p>
           </div>
         </div>
@@ -120,11 +146,12 @@ const EditProfile = () => {
                 </span>
               </label>
               <input
-                value={firstName}
+                name="firstName"
+                value={userData.firstName}
                 type="text"
                 className="input"
                 placeholder="First Name"
-                onChange={(e) => setFirstName(e.target.value)}
+                onChange={handleChange}
               />
               {errors.firstName && (
                 <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>
@@ -136,11 +163,12 @@ const EditProfile = () => {
                 <span className="label-text">Middle Name</span>
               </label>
               <input
-                value={middleName}
+                name="middleName"
+                value={userData.middleName}
                 type="text"
                 className="input"
                 placeholder="Middle Name"
-                onChange={(e) => setMiddleName(e.target.value)}
+                onChange={handleChange}
               />
               {errors.middleName && (
                 <p className="text-red-500 text-xs mt-1">{errors.middleName}</p>
@@ -154,11 +182,12 @@ const EditProfile = () => {
                 </span>
               </label>
               <input
-                value={lastName}
+                name="lastName"
+                value={userData.lastName}
                 type="text"
                 className="input"
                 placeholder="Last Name"
-                onChange={(e) => setLastName(e.target.value)}
+                onChange={handleChange}
               />
               {errors.lastName && (
                 <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
@@ -170,11 +199,12 @@ const EditProfile = () => {
             <span className="label-text">Age</span>
           </label>
           <input
-            value={age}
+            name="age"
+            value={userData.age}
             type="text"
             className="input"
             placeholder="Age"
-            onChange={(e) => setAge(e.target.value)}
+            onChange={handleChange}
           />
           {errors.age && (
             <p className="text-red-500 text-xs mt-1">{errors.age}</p>
@@ -184,23 +214,30 @@ const EditProfile = () => {
             <span className="label-text">Gender</span>
           </label>
           <input
-            value={gender}
+            name="gender"
+            value={userData.gender}
             type="text"
             className="input"
             placeholder="Gender"
-            onChange={(e) => setGender(e.target.value)}
+            onChange={handleChange}
           />
 
           <label className="label">
-            <span className="label-text">Profile URL</span>
+            <span className="label-text">Profile Image</span>
           </label>
           <input
-            value={profileURL}
-            type="text"
-            className="input"
-            placeholder="Profile URL"
-            onChange={(e) => setProfileURL(e.target.value)}
+            name="profileImage"
+            type="file"
+            className="file-input file-input-bordered w-full max-w-xs"
+            onChange={handleFileChange}
           />
+          <button
+            className="btn btn-success mt-4"
+            onClick={() => handleUpload()}
+          >
+            Save
+          </button>
+
           {errors.profileURL && (
             <p className="text-red-500 text-xs mt-1">{errors.profileURL}</p>
           )}
@@ -209,11 +246,12 @@ const EditProfile = () => {
             <span className="label-text">About</span>
           </label>
           <textarea
-            value={about}
+            name="about"
+            value={userData.about}
             type="text"
             className="textarea textarea-sm"
             placeholder="About"
-            onChange={(e) => setAbout(e.target.value)}
+            onChange={handleChange}
           />
           {errors.About && (
             <p className="text-red-500 text-xs mt-1">{errors.About}</p>

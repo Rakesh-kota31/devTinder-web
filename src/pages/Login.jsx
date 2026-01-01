@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { validateLoginData } from "../utils/validations";
-import { baseURL } from "../utils/constants";
-import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../state/userSlice";
 import { useNavigate, Link } from "react-router-dom";
+import axiosInstance from "../utils/axiosInstance";
 
 const Login = () => {
   const [emailID, setEmailID] = useState("");
@@ -14,6 +13,8 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  //console.log("Rendering Login Component");
+
   const handleLogin = async () => {
     const newErrors = validateLoginData(emailID, password);
 
@@ -22,8 +23,8 @@ const Login = () => {
     if (Object.keys(newErrors).length > 0) return;
 
     try {
-      const data = await axios.post(
-        baseURL + "/login",
+      const data = await axiosInstance.post(
+        "/login",
         {
           emailID: emailID,
           password: password,
@@ -34,7 +35,7 @@ const Login = () => {
       );
 
       dispatch(addUser(data?.data?.data));
-      //console.log(data);
+      console.log(data);
       setBackendError(null);
       navigate("/feed");
     } catch (err) {

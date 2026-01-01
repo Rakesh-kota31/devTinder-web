@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { validateSignUpData } from "../utils/validations";
-import { baseURL } from "../utils/constants";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import { useDispatch } from "react-redux";
 import { addUser } from "../state/userSlice";
 import { useNavigate, Link } from "react-router-dom";
@@ -30,8 +29,8 @@ const SignUp = () => {
     if (Object.keys(newErrors).length > 0) return;
 
     try {
-      const data = await axios.post(
-        baseURL + "/signup",
+      const data = await axiosInstance.post(
+        "/signup",
         {
           firstName: firstName,
           lastName: lastName,

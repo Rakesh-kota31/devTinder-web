@@ -1,5 +1,4 @@
-import axios from "axios";
-import { baseURL } from "../utils/constants";
+import axiosInstance from "../utils/axiosInstance";
 import { useDispatch, useSelector } from "react-redux";
 import { addRequests } from "../state/requestSlice";
 import { useEffect } from "react";
@@ -11,7 +10,7 @@ const Requests = () => {
   const fetchUserRequests = async () => {
     try {
       if (requests.length === 0) {
-        const data = await axios.get(baseURL + "/user/requests/received", {
+        const data = await axiosInstance.get("/user/requests/received", {
           withCredentials: true,
         });
         dispatch(addRequests(data?.data?.request));
