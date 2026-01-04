@@ -28,7 +28,7 @@ const App = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/requests" element={<Requests />} />
         <Route path="/connections" element={<Connections />} />
-        <Route path="/profile/edit" element={<EditProfile />} />
+        <Route path="/profile-edit" element={<EditProfile />} />
       </Route>
 
       {/* Catch all */}
