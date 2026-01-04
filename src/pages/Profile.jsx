@@ -30,8 +30,8 @@ const Profile = () => {
 
         <div className="profile-body-block">
           <div className="profile-body-edit">
-            <button className="profile-body-edit-btn" onClick={handleEdit}>
-              <img src="../../public/pencil.png" alt="edit icon" />
+            <button className="profile-edit-btn" onClick={handleEdit}>
+              <img src="./pencil.png" alt="edit icon" />
             </button>
           </div>
           <div className="profile_body">

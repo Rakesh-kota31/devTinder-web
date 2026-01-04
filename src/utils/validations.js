@@ -49,7 +49,7 @@ export const validateLoginData = (emailID, password) => {
 
 export const validateProfileEditData = (data) => {
   const error = {};
-  const { firstName, middleName, lastName, age, gender, profileURL, about } =
+  const { firstName, middleName, lastName, age, gender, about } =
     data;
 
   // First name
@@ -83,14 +83,6 @@ export const validateProfileEditData = (data) => {
 
   if (about && about.length > 300)
     error.about = "About cannot exceed 300 characters";
-
-  if (profileURL) {
-    try {
-      new URL(profileURL);
-    } catch {
-      error.profileURL = "Please enter a valid URL.";
-    }
-  }
 
   return error;
 };

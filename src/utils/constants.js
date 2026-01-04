@@ -5,6 +5,25 @@ export const defaultProfileURL = "https://static.vecteezy.com/system/resources/t
 {/*
   
   
+    <div className="flex justify-between mx-10">
+            <button
+              className="btn btn-soft mt-4"
+              //onClick={() => handleCancel()}
+            >
+              Cancel
+            </button>
+            <button
+              className="btn btn-success mt-4"
+              //onClick={() => handleSave()}
+            >
+              Save
+            </button>
+          </div>
+
+
+
+
+
     const handleCancel = () => {
     navigate("/profile");
   };
@@ -68,106 +87,4 @@ export const defaultProfileURL = "https://static.vecteezy.com/system/resources/t
       [name]: value,
     });
   };
-
-  <label className="label">
-            <span className="label-text">Age</span>
-          </label>
-          <input
-            name="age"
-            value={userData.age}
-            type="text"
-            className="input"
-            placeholder="Age"
-            onChange={handleChange}
-          />
-          {errors.age && (
-            <p className="text-red-500 text-xs mt-1">{errors.age}</p>
-          )}
-
-          <label className="label">
-            <span className="label-text">Gender</span>
-          </label>
-          <input
-            name="gender"
-            value={userData.gender}
-            type="text"
-            className="input"
-            placeholder="Gender"
-            onChange={handleChange}
-          />
-
-          <label className="label">
-            <span className="label-text">Profile Image</span>
-          </label>
-          <input
-            name="profileImage"
-            type="file"
-            className="file-input file-input-bordered w-full max-w-xs"
-            onChange={handleFileChange}
-          />
-          <button
-            className="btn btn-success mt-4"
-            onClick={() => handleUpload()}
-          >
-            Save
-          </button>
-
-          {errors.profileURL && (
-            <p className="text-red-500 text-xs mt-1">{errors.profileURL}</p>
-          )}
-
-          <label className="label">
-            <span className="label-text">About</span>
-          </label>
-          <textarea
-            name="about"
-            value={userData.about}
-            type="text"
-            className="textarea textarea-sm"
-            placeholder="About"
-            onChange={handleChange}
-          />
-          {errors.About && (
-            <p className="text-red-500 text-xs mt-1">{errors.About}</p>
-          )}
-            
-          
-          
-          
-          
-          
-          <div className="profile_card2">
-          <button
-            className="profile-body-btn"
-            onClick={() => setIsEditOpen(true)}
-          >
-            Edit Profile
-          </button>
-        </div>
-
-
-
-
-
-
-   
-        <dialog ref={dialogRef} className="modal">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg">Edit Profile</h3>
-
-            <p className="py-4">Profile edit form here</p>
-
-            <div className="modal-action">
-              <button className="btn" onClick={() => setIsEditOpen(false)}>
-                Close
-              </button>
-            </div>
-          </div>
-        </dialog>
-          
-          
-          
-          
-          
-          
-          */}
+ */}
