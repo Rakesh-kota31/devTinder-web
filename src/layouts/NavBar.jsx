@@ -2,6 +2,8 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { removeUser } from "../state/userSlice";
+import { dropConnections } from "../state/connectionSlice";
+import { dropRequests } from "../state/requestSlice";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
 
@@ -13,6 +15,8 @@ const NavBar = () => {
   const handleLogout = async () => {
     await axiosInstance.post("/logout", {}, { withCredentials: true });
     dispatch(removeUser());
+    dispatch(dropConnections());
+    dispatch(dropRequests());
     navigate("/login");
   };
 
@@ -23,10 +27,10 @@ const NavBar = () => {
           DevTinder
         </Link>
       </div>
-      {user && (
+      {user !== null && (
         <div className="flex gap-2">
           <div className="text-2xl font-bold mt-1">
-            {user.firstName + " " + user.lastName}
+            {user.userDetails.firstName + " " + user.userDetails.lastName}
           </div>
           <div className="dropdown dropdown-end mx-5">
             <div
@@ -35,7 +39,7 @@ const NavBar = () => {
               className="btn btn-ghost btn-circle avatar"
             >
               <div className="w-10 rounded-full">
-                <img alt="Profile picture" src={user.profileURL} />
+                <img alt="Profile picture" src={user.userDetails.profileURL} />
               </div>
             </div>
             <ul

@@ -10,12 +10,12 @@ const Connections = () => {
 
   const fetchConnections = async () => {
     try {
-      if (connections.length === 0) {
-        const data = await axiosInstance.get("/user/connections", {
-          withCredentials: true,
-        });
-        dispatch(addConnections(data?.data?.connections));
-      }
+      //if (connections.length === 0) {
+      const data = await axiosInstance.get("/user/connections", {
+        withCredentials: true,
+      });
+      dispatch(addConnections(data?.data?.connections));
+      //}
     } catch (err) {
       console.log(err);
     }
@@ -26,15 +26,19 @@ const Connections = () => {
   }, []);
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen w-full p-4">
-      <h1 className="text-3xl font-bold mb-6">Connections</h1>
-      <ul className="list bg-base-100 rounded-box shadow-md w-full max-w-2xl">
-        {connections.length !== 0 ? (
-          connections.map((req) => <ConnectionCard key={req._id} data={req} />)
-        ) : (
-          <li className="p-4 text-center opacity-60">No connections</li>
-        )}
-      </ul>
+    <div className="flex flex-col items-center min-h-screen w-full p-4">
+      <h1 className="text-3xl font-bold mb-6">My Connections</h1>
+      <div className="flex flex-col gap-4 items-center min-h-screen w-full p-4">
+        <div className="list bg-base-100 rounded-box shadow-md w-full max-w-2xl">
+          {connections.length !== 0 ? (
+            connections.map((req) => (
+              <ConnectionCard key={req._id} data={req} />
+            ))
+          ) : (
+            <li className="p-4 text-center opacity-60">No connections</li>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

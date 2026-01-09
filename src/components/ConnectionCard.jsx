@@ -2,18 +2,25 @@ const ConnectionCard = (props) => {
   const { _id, firstName, lastName, age, gender, profileURL } = props.data;
 
   return (
-    <li className="list-row gap-4">
-      <div>
-        <img className="size-10 rounded-box" src={profileURL} />
+    <div className="list-row gap-4">
+      <div className="request-card-image-container">
+        <img className=" request-card-image" src={profileURL} />
       </div>
       <div className="flex-1">
-        <div className="text-xs uppercase font-semibold opacity-60">
+        <div className="text-lg font-semibold opacity-60">
           {firstName + " " + lastName}
         </div>
-        <div>{gender}</div>
-        <div>{age}</div>
+        <div className="capitalize">{gender}</div>
+        <div className="">{age}</div>
       </div>
-    </li>
+      <div className="flex gap-2 items-center">
+        <button
+          className="message-button"
+        >
+          Message
+        </button>
+      </div>
+    </div>
   );
 };
 

@@ -13,8 +13,6 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  //console.log("Rendering Login Component");
-
   const handleLogin = async () => {
     const newErrors = validateLoginData(emailID, password);
 
@@ -33,9 +31,7 @@ const Login = () => {
           withCredentials: true,
         }
       );
-
       dispatch(addUser(data?.data?.data));
-      console.log(data);
       setBackendError(null);
       navigate("/feed");
     } catch (err) {

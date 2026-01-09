@@ -29,18 +29,12 @@ const Feed = () => {
   }, []);
 
   return (
-    <div>
-      {cards ? (
-        cards.map((card) => <UserCard key={card._id} data={card} />)
+    <div className="feed-main">
+      {cards.length !== 0 ? (
+        cards.map((card, index) => <UserCard key={card._id} data={card} zIndex={11 - index} />)
       ) : (
-        <div>No new users</div>
+        <div className="text-center">No new users</div>
       )}
-      {/*<div className="stack stack-top size-28">
-        <div className="border-base-content card bg-base-100 border text-center">
-          {cards &&
-            cards.map((card) => <UserCard key={card._id} data={card} />)}
-        </div>
-      </div>*/}
     </div>
   );
 };

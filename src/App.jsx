@@ -8,7 +8,6 @@ import Profile from "./pages/Profile";
 import Requests from "./pages/Requests";
 import Connections from "./pages/Connections";
 import EditProfile from "./pages/EditProfile";
-import ProtectedRoute from "./utils/ProtectedRoute";
 
 const App = () => {
   return (
@@ -19,9 +18,7 @@ const App = () => {
       <Route
         path="/"
         element={
-          <ProtectedRoute>
-            <MainLayout />
-          </ProtectedRoute>
+          <MainLayout />
         }
       >
         <Route path="/feed" element={<Feed />} />
@@ -31,7 +28,7 @@ const App = () => {
         <Route path="/profile-edit" element={<EditProfile />} />
       </Route>
 
-      {/* Catch all */}
+
       <Route path="*" element={<Error />} />
     </Routes>
   );

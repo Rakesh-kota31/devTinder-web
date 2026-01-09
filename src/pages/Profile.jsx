@@ -19,7 +19,7 @@ const Profile = () => {
   if (!user) return null;
 
   const { firstName, middleName, lastName, age, gender, about, profileURL } =
-    user;
+    user.userDetails;
 
   return (
     <div className="profile">

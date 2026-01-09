@@ -4,6 +4,7 @@ import { removeCard } from "../state/cardSlice";
 
 const UserCard = (props) => {
   const { _id, firstName, lastName, profileURL, age, gender, middleName, about } = props.data;
+  const { zIndex } = props;
   const dispatch = useDispatch();
 
   const handleSendRequest = async (status) => {
@@ -22,8 +23,8 @@ const UserCard = (props) => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen w-full p-4">
-      <div className="card bg-base-100 w-full max-w-sm shadow-lg rounded-xl overflow-hidden">
+    <div className={`flex justify-center items-center min-h-screen w-full p-4 user-card`} style={{ zIndex: zIndex }}>
+      <div className="card bg-base-100 w-full max-w-sm shadow-lg rounded-xl overflow-hidden user-card-inner">
         {/* Profile Image */}
         <figure className="h-64 overflow-hidden">
           <img 
@@ -50,7 +51,7 @@ const UserCard = (props) => {
           {/* Action Buttons */}
           <div className="card-actions justify-center gap-2 mt-3">
             <button className="btn btn-sm btn-success" onClick={() => handleSendRequest("interested")}>Interested</button>
-            <button className="btn btn-sm btn-error" onClick={() => handleSendRequest("Ignore")}>Ignore</button>
+            <button className="btn btn-sm btn-error" onClick={() => handleSendRequest("ignored")}>Ignore</button>
           </div>
         </div>
       </div>

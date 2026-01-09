@@ -12,13 +12,13 @@ const EditProfile = () => {
   const [file, setFile] = useState(null);
 
   const [userData, setUserData] = useState({
-    firstName: user.firstName || "",
-    middleName: user.middleName || "",
-    lastName: user.lastName || "",
-    age: user.age || "",
-    gender: user.gender || "",
-    about: user.about || "",
-    profileURL: user.profileURL || defaultProfileURL,
+    firstName: user.userDetails.firstName || "",
+    middleName: user.userDetails.middleName || "",
+    lastName: user.userDetails.lastName || "",
+    age: user.userDetails.age || "",
+    gender: user.userDetails.gender || "",
+    about: user.userDetails.about || "",
+    profileURL: user.userDetails.profileURL || defaultProfileURL,
   });
 
   const [errors, setErrors] = useState({});
@@ -48,7 +48,7 @@ const EditProfile = () => {
     const changedFields = {};
 
     Object.keys(userData).forEach((key) => {
-      if (userData[key] !== user[key] && userData[key] !== "" && key !== "profileURL") {
+      if (userData[key] !== user.userDetails[key] && userData[key] !== "" && key !== "profileURL") {
         changedFields[key] = userData[key];
       }
     });
