@@ -29,9 +29,12 @@ const EditProfile = () => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
     if (selectedFile) {
-      setUserData({ ...userData, profileURL: URL.createObjectURL(selectedFile) });
+      setUserData({
+        ...userData,
+        profileURL: URL.createObjectURL(selectedFile),
+      });
     }
-  }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,25 +51,24 @@ const EditProfile = () => {
     const changedFields = {};
 
     Object.keys(userData).forEach((key) => {
-      if (userData[key] !== user.userDetails[key] && userData[key] !== "" && key !== "profileURL") {
+      if (
+        userData[key] !== user.userDetails[key] &&
+        userData[key] !== "" &&
+        key !== "profileURL"
+      ) {
         changedFields[key] = userData[key];
       }
     });
 
     try {
-
       if (Object.keys(changedFields).length === 0 && !file) {
         navigate("/profile");
         return;
       }
 
-      let data = await axiosInstance.patch(
-        "/profile/edit",
-        changedFields,
-        {
-          withCredentials: true,
-        }
-      );
+      let data = await axiosInstance.patch("/profile/edit", changedFields, {
+        withCredentials: true,
+      });
 
       if (!file) {
         dispatch(updateUser(data?.data?.data));
@@ -191,18 +193,34 @@ const EditProfile = () => {
                 )}
               </div>
 
-              <div className="pe">
+              <div className="profile-edit-gender">
                 <label className="profile-edit-label">
                   <span className="label-text">Gender</span>
                 </label>
-                <input
-                  name="gender"
-                  value={userData.gender}
-                  type="text"
-                  className="profile-edit-input"
-                  placeholder="Gender"
-                  onChange={handleChange}
-                />
+                <div className="radio-group-gender">
+                  <input
+                    type="radio"
+                    id="gender-male"
+                    name="gender"
+                    value="male"
+                    checked={userData.gender === "male"}
+                    onChange={(e) =>
+                      setUserData({ ...userData, gender: e.target.value })
+                    }
+                  />
+                  <label forHTML="gender-male">Male</label>
+                  <input
+                    type="radio"
+                    id="gender-female"
+                    name="gender"
+                    value="female"
+                    checked={userData.gender === "female"}
+                    onChange={(e) =>
+                      setUserData({ ...userData, gender: e.target.value })
+                    }
+                  />
+                  <label forHTML="gender-female">Female</label>
+                </div>
               </div>
             </div>
 
